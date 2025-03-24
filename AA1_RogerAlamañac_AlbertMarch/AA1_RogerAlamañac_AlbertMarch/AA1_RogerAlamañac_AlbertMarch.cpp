@@ -1,19 +1,129 @@
-// AA1_RogerAlamañac_AlbertMarch.cpp : Este archivo contiene la función "main". La ejecución del programa comienza y termina ahí.
-//
+#include <GL/glut.h>
 
-#include <iostream>
+float alpha = 0, beta = 0, delta = 1;
+float angle = 0;
 
-int main()
-{
-    std::cout << "Hello World!\n";
+void timer(int value) {
+    angle += 1;
+    if (angle >= 360) {
+        angle = 0;
+    }
+
+    glutPostRedisplay();
+    glutTimerFunc(40, timer, 1);
+
+}
+int init(void) {
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    gluLookAt(0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0,
+        1.0, 0.0, 0.0);
+    glOrtho(-5.2, 5.2, -5.2, 5.2, -5.2, 5.2);
+return 0;
 }
 
-// Ejecutar programa: Ctrl + F5 o menú Depurar > Iniciar sin depurar
-// Depurar programa: F5 o menú Depurar > Iniciar depuración
+void drawPyramid() {
 
-// Sugerencias para primeros pasos: 1. Use la ventana del Explorador de soluciones para agregar y administrar archivos
-//   2. Use la ventana de Team Explorer para conectar con el control de código fuente
-//   3. Use la ventana de salida para ver la salida de compilación y otros mensajes
-//   4. Use la ventana Lista de errores para ver los errores
-//   5. Vaya a Proyecto > Agregar nuevo elemento para crear nuevos archivos de código, o a Proyecto > Agregar elemento existente para agregar archivos de código existentes al proyecto
-//   6. En el futuro, para volver a abrir este proyecto, vaya a Archivo > Abrir > Proyecto y seleccione el archivo .sln
+    glBegin(GL_TRIANGLES);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glVertex3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(-1.0f, -1.0f, 1.0f);
+    glVertex3f(1.0f, -1.0f, 1.0f);
+
+    glVertex3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(1.0f, -1.0f, 1.0f);
+    glVertex3f(1.0f, -1.0f, -1.0f);
+
+    glVertex3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(1.0f, -1.0f, -1.0f);
+    glVertex3f(-1.0f, -1.0f, -1.0f);
+
+    glVertex3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(-1.0f, -1.0f, -1.0f);
+    glVertex3f(-1.0f, -1.0f, 1.0f);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glVertex3f(-1.0f, -1.0f, 1.0f);
+    glVertex3f(1.0f, -1.0f, 1.0f);
+    glVertex3f(1.0f, -1.0f, -1.0f);
+    glVertex3f(-1.0f, -1.0f, -1.0f);
+    glEnd();
+}
+
+void display(void) {
+glClear(GL_COLOR_BUFFER_BIT);
+glColor3f(1.0, 0.0, 0.0);
+glMatrixMode(GL_MODELVIEW);
+glLoadIdentity();
+
+glPushMatrix();
+glColor3f(1.0, 0.0, 1.0);
+glTranslatef(alpha, 0.0, beta);
+glutSolidCube(3.0f);
+glPopMatrix();
+
+glPushMatrix();
+glColor3f(0.0, 1.0, 0.0);
+glTranslatef(0.0, 0.0, 0.0);
+glRotatef(angle, 0.0, 0.0, 1.0);
+glTranslatef(0.0, 0.0, 0.0);
+glutWireSphere(3, 20, 20);
+glPopMatrix();
+
+
+//drawPyramid();
+
+glFlush();
+}
+
+void keyPressed_special(int key, int x, int y) {
+
+    switch (key) {
+
+    case GLUT_KEY_PAGE_UP:
+
+        delta = delta * 1.1f;
+        break;
+
+    case GLUT_KEY_PAGE_DOWN:
+        delta = delta * 0.99f;
+        break;
+
+    case GLUT_KEY_LEFT:
+        beta += 0.1;
+        break;
+
+    case GLUT_KEY_RIGHT:
+        beta -= 0.1;
+        break;
+
+    case GLUT_KEY_UP:
+        alpha += 0.1;
+        break;
+    case GLUT_KEY_DOWN:
+        alpha -= 0.1;
+        break;
+    }
+
+    glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
+
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE| GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(500, 500);
+    glutInitWindowPosition(100, 100);
+    glutCreateWindow("AA1");
+
+    init();
+    glutSpecialFunc(keyPressed_special);
+    glutTimerFunc(40, timer, 1);
+    glutDisplayFunc(display);
+    glutMainLoop();
+return 0;
+}
