@@ -57,9 +57,15 @@ void drawPyramid() {
 void display(void) {
 glClear(GL_COLOR_BUFFER_BIT);
 glColor3f(1.0, 0.0, 0.0);
+
+glViewport(0, 125, 250, 250);
+glPushMatrix();
+
 glMatrixMode(GL_MODELVIEW);
 glLoadIdentity();
-
+gluLookAt(1.0, 3.0, 1.0,  // Posición de la cámara
+    0.0, 0.0, 0.0,   // Punto al que mira
+    1.0, 0.0, 0.0);  // Vector "arriba"
 glPushMatrix();
 glColor3f(1.0, 0.0, 1.0);
 glTranslatef(alpha, 0.0, beta);
@@ -69,14 +75,40 @@ glPopMatrix();
 glPushMatrix();
 glColor3f(0.0, 1.0, 0.0);
 glTranslatef(0.0, 0.0, 0.0);
+glScalef(delta, delta, delta);
+glRotatef(angle, 0.0, 0.0, 1.0);
+glTranslatef(0.0, 0.0, 0.0);
+glutWireSphere(3, 20, 20);
+glPopMatrix();
+
+drawPyramid();
+glPopMatrix();
+
+glViewport(250, 125, 250, 250);
+glPushMatrix();
+glMatrixMode(GL_MODELVIEW);
+glLoadIdentity();
+//gluLookAt(0.0, 1.0, 0.0,
+//    0.0, 0.0, 0.0,
+//    1.0, 1.0, 0.0);
+glPushMatrix();
+glColor3f(1.0, 0.0, 1.0);
+glTranslatef(alpha, 0.0, beta);
+glutSolidCube(3.0f);
+glPopMatrix();
+
+glPushMatrix();
+glColor3f(0.0, 1.0, 0.0);
+glTranslatef(0.0, 0.0, 0.0);
+glScalef(delta, delta, delta);
 glRotatef(angle, 0.0, 0.0, 1.0);
 glTranslatef(0.0, 0.0, 0.0);
 glutWireSphere(3, 20, 20);
 glPopMatrix();
 
 
-//drawPyramid();
-
+drawPyramid();
+glPopMatrix();
 glFlush();
 }
 
@@ -86,7 +118,7 @@ void keyPressed_special(int key, int x, int y) {
 
     case GLUT_KEY_PAGE_UP:
 
-        delta = delta * 1.1f;
+        delta = delta * 1.01f;
         break;
 
     case GLUT_KEY_PAGE_DOWN:
@@ -125,5 +157,5 @@ int main(int argc, char** argv) {
     glutTimerFunc(40, timer, 1);
     glutDisplayFunc(display);
     glutMainLoop();
-return 0;
+    return 0;
 }
