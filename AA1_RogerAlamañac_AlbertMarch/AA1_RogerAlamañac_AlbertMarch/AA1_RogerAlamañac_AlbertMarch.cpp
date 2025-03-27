@@ -15,14 +15,18 @@ void timer(int value) {
 }
 int init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
+    // Proyección
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+    glOrtho(-5.2, 5.2, -5.2, 5.2, -5.2, 5.2);
 
+    // Vista camara
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
     gluLookAt(0.0, 1.0, 0.0,
         0.0, 0.0, 0.0,
         1.0, 0.0, 0.0);
-    glOrtho(-5.2, 5.2, -5.2, 5.2, -5.2, 5.2);
-return 0;
+    return 0;
 }
 
 void drawPyramid() {
@@ -54,76 +58,132 @@ void drawPyramid() {
     glEnd();
 }
 
+void drawViewportBorders() {
+    // Restaurar viewport a toda la ventana
+    glViewport(0, 0, 500, 500);
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0, 500, 0, 500);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    glColor3f(1, 1, 1);  // Blanco
+    glLineWidth(2.0f);
+
+    // Borde viewport izquierdo
+    glBegin(GL_LINE_LOOP);
+    glVertex2i(0, 125);
+    glVertex2i(250, 125);
+    glVertex2i(250, 375);
+    glVertex2i(0, 375);
+    glEnd();
+
+    // Borde viewport derecho
+    glBegin(GL_LINE_LOOP);
+    glVertex2i(250, 125);
+    glVertex2i(500, 125);
+    glVertex2i(500, 375);
+    glVertex2i(250, 375);
+    glEnd();
+
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void drawScene() {
+    glPushMatrix();
+    glColor3f(1, 0, 1);
+    glTranslatef(alpha, 0.0, beta);
+    glutSolidCube(3.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glColor3f(0, 1, 0);
+    glScalef(delta, delta, delta);
+    glRotatef(angle, 0, 0, 1);
+    glutWireSphere(3, 20, 20);
+    glPopMatrix();
+
+    drawPyramid();
+}
+
 void display(void) {
-glClear(GL_COLOR_BUFFER_BIT);
-glColor3f(1.0, 0.0, 0.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(1.0, 0.0, 0.0);
 
-glViewport(0, 125, 250, 250);
-glPushMatrix();
+    glViewport(0, 125, 250, 250);
+    glPushMatrix();
 
-glMatrixMode(GL_MODELVIEW);
-glLoadIdentity();
-gluLookAt(1.0, 3.0, 1.0,  // Posición de la cámara
-    0.0, 0.0, 0.0,   // Punto al que mira
-    1.0, 0.0, 0.0);  // Vector "arriba"
-glPushMatrix();
-glColor3f(1.0, 0.0, 1.0);
-glTranslatef(alpha, 0.0, beta);
-glutSolidCube(3.0f);
-glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluPerspective(60.0, 0.5, 1.0, 100.0); // FOV, aspecto, near, far
 
-glPushMatrix();
-glColor3f(0.0, 1.0, 0.0);
-glTranslatef(0.0, 0.0, 0.0);
-glScalef(delta, delta, delta);
-glRotatef(angle, 0.0, 0.0, 1.0);
-glTranslatef(0.0, 0.0, 0.0);
-glutWireSphere(3, 20, 20);
-glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(5, 5, 5, 0, 0, 0, 0, 1, 0);
 
-drawPyramid();
-glPopMatrix();
+    //gluLookAt(1.0, 3.0, 1.0,  // Posición de la cámara
+    //    0.0, 0.0, 0.0,   // Punto al que mira
+    //    1.0, 0.0, 0.0);  // Vector "arriba"
 
-glViewport(250, 125, 250, 250);
-glPushMatrix();
-glMatrixMode(GL_MODELVIEW);
-glLoadIdentity();
-//gluLookAt(0.0, 1.0, 0.0,
-//    0.0, 0.0, 0.0,
-//    1.0, 1.0, 0.0);
-glPushMatrix();
-glColor3f(1.0, 0.0, 1.0);
-glTranslatef(alpha, 0.0, beta);
-glutSolidCube(3.0f);
-glPopMatrix();
+    glPushMatrix();
+    glColor3f(1.0, 0.0, 1.0);
+    glTranslatef(alpha, 0.0, beta);
+    glutSolidCube(3.0f);
+    glPopMatrix();
 
-glPushMatrix();
-glColor3f(0.0, 1.0, 0.0);
-glTranslatef(0.0, 0.0, 0.0);
-glScalef(delta, delta, delta);
-glRotatef(angle, 0.0, 0.0, 1.0);
-glTranslatef(0.0, 0.0, 0.0);
-glutWireSphere(3, 20, 20);
-glPopMatrix();
+    glPushMatrix();
+    glColor3f(0.0, 1.0, 0.0);
+    glTranslatef(0.0, 0.0, 0.0);
+    glScalef(delta, delta, delta);
+    glRotatef(angle, 0.0, 0.0, 1.0);
+    glTranslatef(0.0, 0.0, 0.0);
+    glutWireSphere(3, 20, 20);
+    glPopMatrix();
 
+    drawPyramid();
+    glPopMatrix();
 
-drawPyramid();
-glPopMatrix();
-glFlush();
+    glViewport(250, 125, 250, 250);
+    glPushMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    //gluLookAt(-1.0, 3.0, 1.0,  // Posición de la cámara (cambiada)
+    //      0.0, 0.0, 0.0,   // Punto al que mira
+    //      1.0, 0.0, 0.0);  // Vector "arriba"
+    glPushMatrix();
+    glColor3f(1.0, 0.0, 1.0);
+    glTranslatef(alpha, 0.0, beta);
+    glutSolidCube(3.0f);
+    glPopMatrix();
+
+    glPushMatrix();
+    glColor3f(0.0, 1.0, 0.0);
+    glTranslatef(0.0, 0.0, 0.0);
+    glScalef(delta, delta, delta);
+    glRotatef(angle, 0.0, 0.0, 1.0);
+    glTranslatef(0.0, 0.0, 0.0);
+    glutWireSphere(3, 20, 20);
+    glPopMatrix();
+    drawPyramid();
+    glPopMatrix();
+
+    glPushMatrix();
+    drawViewportBorders();
+    glPopMatrix();
+
+    glFlush();
 }
 
 void keyPressed_special(int key, int x, int y) {
 
     switch (key) {
-
-    case GLUT_KEY_PAGE_UP:
-
-        delta = delta * 1.01f;
-        break;
-
-    case GLUT_KEY_PAGE_DOWN:
-        delta = delta * 0.99f;
-        break;
 
     case GLUT_KEY_LEFT:
         beta += 0.1;
@@ -144,6 +204,18 @@ void keyPressed_special(int key, int x, int y) {
     glutPostRedisplay();
 }
 
+void keyPressed(unsigned char key, int x, int y) {
+    switch (key) {
+    case '+':
+        delta *= 1.01f;
+        break;
+    case '-':
+        delta *= 0.99f;
+        break;
+    }
+    glutPostRedisplay();
+}
+
 int main(int argc, char** argv) {
 
     glutInit(&argc, argv);
@@ -154,6 +226,7 @@ int main(int argc, char** argv) {
 
     init();
     glutSpecialFunc(keyPressed_special);
+    glutKeyboardFunc(keyPressed);
     glutTimerFunc(40, timer, 1);
     glutDisplayFunc(display);
     glutMainLoop();
