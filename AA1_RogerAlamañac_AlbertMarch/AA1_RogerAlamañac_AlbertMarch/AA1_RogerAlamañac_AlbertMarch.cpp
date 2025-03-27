@@ -152,7 +152,11 @@ void display(void) {
     glutWireSphere(1.0, 20, 20);
     glPopMatrix();
 
+    glPushMatrix();
+    glRotatef(angle, 0.0, 1.0, 0.0);
     drawPyramid();
+    glPopMatrix();
+
     glPopMatrix();
 
     glViewport(250, 125, 250, 250);
@@ -180,7 +184,11 @@ void display(void) {
     glutWireSphere(1.0, 20, 20);
     glPopMatrix();
 
+    glPushMatrix();
+    glRotatef(angle, 0.0, 1.0, 0.0);
     drawPyramid();
+    glPopMatrix();
+
     glPopMatrix();
 
     glPushMatrix();
