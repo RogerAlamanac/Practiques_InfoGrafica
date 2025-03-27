@@ -30,31 +30,41 @@ int init(void) {
 }
 
 void drawPyramid() {
+    glColor3f(1.0f, 0.0f, 0.0f); // Color rojo
 
-    glBegin(GL_TRIANGLES);
-    glColor3f(1.0f, 0.0f, 0.0f);
+    glBegin(GL_LINES);
+    // Lados de las caras triangulares
     glVertex3f(0.0f, 1.0f, 0.0f);
     glVertex3f(-1.0f, -1.0f, 1.0f);
+    glVertex3f(-1.0f, -1.0f, 1.0f);
+    glVertex3f(1.0f, -1.0f, 1.0f);
+    glVertex3f(1.0f, -1.0f, 1.0f);
+    glVertex3f(0.0f, 1.0f, 0.0f);
+
+    glVertex3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(1.0f, -1.0f, -1.0f);
+    glVertex3f(1.0f, -1.0f, -1.0f);
     glVertex3f(1.0f, -1.0f, 1.0f);
 
     glVertex3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(1.0f, -1.0f, 1.0f);
+    glVertex3f(-1.0f, -1.0f, -1.0f);
+    glVertex3f(-1.0f, -1.0f, -1.0f);
     glVertex3f(1.0f, -1.0f, -1.0f);
 
     glVertex3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(1.0f, -1.0f, -1.0f);
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-
-    glVertex3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(-1.0f, -1.0f, -1.0f);
     glVertex3f(-1.0f, -1.0f, 1.0f);
-    glEnd();
+    glVertex3f(-1.0f, -1.0f, 1.0f);
+    glVertex3f(-1.0f, -1.0f, -1.0f);
 
-    glBegin(GL_QUADS);
+    // Base cuadrada
     glVertex3f(-1.0f, -1.0f, 1.0f);
     glVertex3f(1.0f, -1.0f, 1.0f);
+    glVertex3f(1.0f, -1.0f, 1.0f);
+    glVertex3f(1.0f, -1.0f, -1.0f);
     glVertex3f(1.0f, -1.0f, -1.0f);
     glVertex3f(-1.0f, -1.0f, -1.0f);
+    glVertex3f(-1.0f, -1.0f, -1.0f);
+    glVertex3f(-1.0f, -1.0f, 1.0f);
     glEnd();
 }
 
@@ -118,59 +128,58 @@ void display(void) {
     glColor3f(1.0, 0.0, 0.0);
 
     glViewport(0, 125, 250, 250);
-    glPushMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(60.0, 1.0, 1.0, 100.0); // Perspectiva clásica
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluPerspective(60.0, 0.5, 1.0, 100.0); // FOV, aspecto, near, far
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    //gluLookAt(5, 5, 5, 0, 0, 0, 0, 1, 0);
-
-    gluLookAt(1.0, 3.0, 1.0,  // Posición de la cámara
-        0.0, 0.0, 0.0,   // Punto al que mira
-        1.0, 0.0, 0.0);  // Vector "arriba"
+    gluLookAt(5.0, 5.0, 5.0,  // Cámara en diagonal
+              0.0, 0.0, 0.0,  // Mira al centro
+              0.0, 1.0, 0.0); // Arriba = eje Y
 
     glPushMatrix();
     glColor3f(1.0, 0.0, 1.0);
     glTranslatef(alpha, 0.0, beta);
-    glutSolidCube(3.0f);
+    glutWireCube(3.0f);
     glPopMatrix();
 
     glPushMatrix();
     glColor3f(0.0, 1.0, 0.0);
-    glTranslatef(0.0, 0.0, 0.0);
+    glRotatef(angle, 1.0, 0.0, 0.0);
+    glTranslatef(0.0, 0.0, 3.0);
     glScalef(delta, delta, delta);
-    glRotatef(angle, 0.0, 0.0, 1.0);
-    glTranslatef(0.0, 0.0, 0.0);
-    glutWireSphere(3, 20, 20);
+    glutWireSphere(1.0, 20, 20);
     glPopMatrix();
 
     drawPyramid();
     glPopMatrix();
 
     glViewport(250, 125, 250, 250);
-    glPushMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-5, 5, -5, 5, -10, 10);  // Volumen ortográfico
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    //gluLookAt(-1.0, 3.0, 1.0,  // Posición de la cámara (cambiada)
-    //      0.0, 0.0, 0.0,   // Punto al que mira
-    //      1.0, 0.0, 0.0);  // Vector "arriba"
+    gluLookAt(10.0, 0.0, 0.0,
+              0.0, 0.0, 0.0,
+              0.0, 1.0, 0.0); // Vista lateral desde el eje X
+
     glPushMatrix();
     glColor3f(1.0, 0.0, 1.0);
-    glTranslatef(alpha, 0.0, beta);
-    glutSolidCube(3.0f);
+    glTranslatef(0.0, alpha, beta);
+    glutWireCube(3.0f);
     glPopMatrix();
 
     glPushMatrix();
     glColor3f(0.0, 1.0, 0.0);
-    glTranslatef(0.0, 0.0, 0.0);
+    glRotatef(angle, 1.0, 0.0, 0.0);
+    glTranslatef(0.0, 0.0, 3.0);
     glScalef(delta, delta, delta);
-    glRotatef(angle, 0.0, 0.0, 1.0);
-    glTranslatef(0.0, 0.0, 0.0);
-    glutWireSphere(3, 20, 20);
+    glutWireSphere(1.0, 20, 20);
     glPopMatrix();
+
     drawPyramid();
     glPopMatrix();
 
@@ -184,20 +193,17 @@ void display(void) {
 void keyPressed_special(int key, int x, int y) {
 
     switch (key) {
-
     case GLUT_KEY_LEFT:
-        beta += 0.1;
+        beta += 0.1f;  // mueve en Z (vista lateral) o X (perspectiva)
         break;
-
     case GLUT_KEY_RIGHT:
-        beta -= 0.1;
+        beta -= 0.1f;
         break;
-
     case GLUT_KEY_UP:
-        alpha += 0.1;
+        alpha += 0.1f;  // mueve en Y (ambas vistas)
         break;
     case GLUT_KEY_DOWN:
-        alpha -= 0.1;
+        alpha -= 0.1f;
         break;
     }
 
@@ -225,7 +231,7 @@ void keyPressed(unsigned char key, int x, int y) {
 int main(int argc, char** argv) {
 
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE| GLUT_RGB | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(100, 100);
     glutCreateWindow("AA1");
