@@ -21,11 +21,11 @@ int init(void) {
     glOrtho(-5.2, 5.2, -5.2, 5.2, -5.2, 5.2);
 
     // Vista camara
-    glMatrixMode(GL_MODELVIEW);
+    /*glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(0.0, 1.0, 0.0,
         0.0, 0.0, 0.0,
-        1.0, 0.0, 0.0);
+        1.0, 0.0, 0.0);*/
     return 0;
 }
 
@@ -126,11 +126,11 @@ void display(void) {
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(5, 5, 5, 0, 0, 0, 0, 1, 0);
+    //gluLookAt(5, 5, 5, 0, 0, 0, 0, 1, 0);
 
-    //gluLookAt(1.0, 3.0, 1.0,  // Posición de la cámara
-    //    0.0, 0.0, 0.0,   // Punto al que mira
-    //    1.0, 0.0, 0.0);  // Vector "arriba"
+    gluLookAt(1.0, 3.0, 1.0,  // Posición de la cámara
+        0.0, 0.0, 0.0,   // Punto al que mira
+        1.0, 0.0, 0.0);  // Vector "arriba"
 
     glPushMatrix();
     glColor3f(1.0, 0.0, 1.0);
@@ -211,6 +211,12 @@ void keyPressed(unsigned char key, int x, int y) {
         break;
     case '-':
         delta *= 0.99f;
+        break;
+    case 'r':
+        alpha = 0;
+        beta = 0;
+        delta = 1;
+        angle = 0;
         break;
     }
     glutPostRedisplay();
