@@ -15,25 +15,19 @@ void timer(int value) {
 }
 int init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
-    // Proyección
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(-5.2, 5.2, -5.2, 5.2, -5.2, 5.2);
 
-    // Vista camara
-    /*glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt(0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0,
-        1.0, 0.0, 0.0);*/
     return 0;
 }
 
 void drawPyramid() {
-    glColor3f(1.0f, 0.0f, 0.0f); // Color rojo
+    glColor3f(1.0f, 0.0f, 0.0f);
 
     glBegin(GL_LINES);
-    // Lados de las caras triangulares
+
     glVertex3f(0.0f, 1.0f, 0.0f);
     glVertex3f(-1.0f, -1.0f, 1.0f);
     glVertex3f(-1.0f, -1.0f, 1.0f);
@@ -56,7 +50,6 @@ void drawPyramid() {
     glVertex3f(-1.0f, -1.0f, 1.0f);
     glVertex3f(-1.0f, -1.0f, -1.0f);
 
-    // Base cuadrada
     glVertex3f(-1.0f, -1.0f, 1.0f);
     glVertex3f(1.0f, -1.0f, 1.0f);
     glVertex3f(1.0f, -1.0f, 1.0f);
@@ -69,7 +62,6 @@ void drawPyramid() {
 }
 
 void drawViewportBorders() {
-    // Restaurar viewport a toda la ventana
     glViewport(0, 0, 500, 500);
 
     glMatrixMode(GL_PROJECTION);
@@ -81,10 +73,9 @@ void drawViewportBorders() {
     glPushMatrix();
     glLoadIdentity();
 
-    glColor3f(1, 1, 1);  // Blanco
+    glColor3f(1, 1, 1);  
     glLineWidth(2.0f);
 
-    // Borde viewport izquierdo
     glBegin(GL_LINE_LOOP);
     glVertex2i(0, 125);
     glVertex2i(250, 125);
@@ -92,7 +83,6 @@ void drawViewportBorders() {
     glVertex2i(0, 375);
     glEnd();
 
-    // Borde viewport derecho
     glBegin(GL_LINE_LOOP);
     glVertex2i(250, 125);
     glVertex2i(500, 125);
@@ -130,13 +120,13 @@ void display(void) {
     glViewport(0, 125, 250, 250);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(60.0, 1.0, 1.0, 100.0); // Perspectiva clásica
+    gluPerspective(60.0, 1.0, 1.0, 100.0);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(5.0, 5.0, 5.0,  // Cámara en diagonal
-              0.0, 0.0, 0.0,  // Mira al centro
-              0.0, 1.0, 0.0); // Arriba = eje Y
+    gluLookAt(5.0, 5.0, 5.0, 
+              0.0, 0.0, 0.0,  
+              0.0, 1.0, 0.0);
 
     glPushMatrix();
     glColor3f(1.0, 0.0, 1.0);
@@ -162,13 +152,13 @@ void display(void) {
     glViewport(250, 125, 250, 250);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-5, 5, -5, 5, -10, 10);  // Volumen ortográfico
+    glOrtho(-5, 5, -5, 5, -10, 10);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(10.0, 0.0, 0.0,
               0.0, 0.0, 0.0,
-              0.0, 1.0, 0.0); // Vista lateral desde el eje X
+              0.0, 1.0, 0.0); 
 
     glPushMatrix();
     glColor3f(1.0, 0.0, 1.0);
@@ -202,13 +192,13 @@ void keyPressed_special(int key, int x, int y) {
 
     switch (key) {
     case GLUT_KEY_LEFT:
-        beta += 0.1f;  // mueve en Z (vista lateral) o X (perspectiva)
+        beta += 0.1f; 
         break;
     case GLUT_KEY_RIGHT:
         beta -= 0.1f;
         break;
     case GLUT_KEY_UP:
-        alpha += 0.1f;  // mueve en Y (ambas vistas)
+        alpha += 0.1f;
         break;
     case GLUT_KEY_DOWN:
         alpha -= 0.1f;
