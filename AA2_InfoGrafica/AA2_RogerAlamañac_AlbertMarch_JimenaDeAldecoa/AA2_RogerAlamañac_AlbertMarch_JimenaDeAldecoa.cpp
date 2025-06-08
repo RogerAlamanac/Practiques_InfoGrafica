@@ -318,20 +318,20 @@ void update(int value) {
 // Controles
 void handleKeyPress(unsigned char key, int x, int y) {
     switch (key) {
-    case 'w': moveForward = 1; break;
-    case 's': moveForward = -1; break;
-    case 'a': rotatePlayer = -1; break;
-    case 'd': rotatePlayer = 1; break;
+    case 'w': moveForward = 1; break; //Moverse hacia delante
+    case 's': moveForward = -1; break; //Moverse hacia atrás
+    case 'a': rotatePlayer = -1; break; //Mirar a la izquierda
+    case 'd': rotatePlayer = 1; break; //Mirar a la derecha
     case 'e': {
         float distX = playerX - doorPosX;
         float distZ = playerZ - (doorPosZ + 1.0f);
-        if (sqrt(distX * distX + distZ * distZ) < 3.5f) {
+        if (sqrt(distX * distX + distZ * distZ) < 3.5f) { //Abrir puerta
             if (doorState == CLOSED) doorState = OPENING;
             else if (doorState == OPEN) doorState = CLOSING;
         }
         break;
     }
-    case 'f':
+    case 'f': //Activar linterna
         if (sunPosition > 180.0f) flashlightActive = !flashlightActive;
         break;
     }
